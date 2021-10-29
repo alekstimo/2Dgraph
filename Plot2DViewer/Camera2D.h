@@ -179,7 +179,8 @@ public:
 			T = pry + (T-pry) * deltForSize;
 			B = pry - (pry-B) * deltForSize;
 		}
-
+		deltaXForDrag = (R - L) / W;
+		deltaYForDrag = (T - B) / H;
 	}
 	void StartDragging(int X, int Y)
 	{
