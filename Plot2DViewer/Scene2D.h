@@ -16,7 +16,7 @@ public:
 		HPEN pen = (HPEN)SelectObject(dc, CreatePen(PS_SOLID, 1, RGB(0, 0, 0)));
 		if (axes)
 			Axes(dc);
-		HPEN hPen2 = CreatePen(PS_SOLID, 5, RGB(200, 0, 100));
+		HPEN hPen2 = CreatePen(PS_SOLID, pensolid, RGB(200, 0, 100));
 		SelectObject(dc, hPen2);
 		pix = (R - L) / W;
 		if(z)

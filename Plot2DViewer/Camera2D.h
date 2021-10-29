@@ -1,4 +1,4 @@
-#ifndef CAMERA_2D_H
+п»ї#ifndef CAMERA_2D_H
 #define CAMERA_2D_H
 
 #include <string>
@@ -7,27 +7,32 @@
 class Camera2D
 {
 protected:
+	/*double deltXForSize;
+	double deltYForSize;*/
+	double deltForSize = 1.125;
+	double deltaXForDrag, deltaYForDrag;
+	int pensolid = 5;
 	double pix = (R - L) / W;
-	double L, R, B, T;					// Мировые координаты границ рабочей области окна
-	int W, H;							// Разрешение рабочей области окна
-	int WorldToScreenX(double X)		// Переход от мировых координат к экранным (для абсциссы)
+	double L, R, B, T;					// РњРёСЂРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РіСЂР°РЅРёС† СЂР°Р±РѕС‡РµР№ РѕР±Р»Р°СЃС‚Рё РѕРєРЅР°
+	int W, H;							// Р Р°Р·СЂРµС€РµРЅРёРµ СЂР°Р±РѕС‡РµР№ РѕР±Р»Р°СЃС‚Рё РѕРєРЅР°
+	int WorldToScreenX(double X)		// РџРµСЂРµС…РѕРґ РѕС‚ РјРёСЂРѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚ Рє СЌРєСЂР°РЅРЅС‹Рј (РґР»СЏ Р°Р±СЃС†РёСЃСЃС‹)
 	{
 		return  W / (R - L) * (X - L);
 	}
-	int WorldToScreenY(double Y)		// Переход от мировых координат к экранным (для ординаты)
+	int WorldToScreenY(double Y)		// РџРµСЂРµС…РѕРґ РѕС‚ РјРёСЂРѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚ Рє СЌРєСЂР°РЅРЅС‹Рј (РґР»СЏ РѕСЂРґРёРЅР°С‚С‹)
 	{
 		return  H - H / (T - B) * (Y - B);
 	}
-	double ScreenToWorldX(double X)		// Переход от экранных координат к мировым (для абсциссы)
+	double ScreenToWorldX(double X)		// РџРµСЂРµС…РѕРґ РѕС‚ СЌРєСЂР°РЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚ Рє РјРёСЂРѕРІС‹Рј (РґР»СЏ Р°Р±СЃС†РёСЃСЃС‹)
 	{
 		return (X * (R - L)) / W + L;
 	}
-	double ScreenToWorldY(double Y)		// Переход от экранных координат к мировым (для ординаты)
+	double ScreenToWorldY(double Y)		// РџРµСЂРµС…РѕРґ РѕС‚ СЌРєСЂР°РЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚ Рє РјРёСЂРѕРІС‹Рј (РґР»СЏ РѕСЂРґРёРЅР°С‚С‹)
 	{
 		return ((H - Y) * (T - B)) / H + B;
 	}
 private:
-	double posX, posY;					// Позиция графического курсора в мировых координатах (для функций MoveTo и LineTo)
+	double posX, posY;					// РџРѕР·РёС†РёСЏ РіСЂР°С„РёС‡РµСЃРєРѕРіРѕ РєСѓСЂСЃРѕСЂР° РІ РјРёСЂРѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚Р°С… (РґР»СЏ С„СѓРЅРєС†РёР№ MoveTo Рё LineTo)
 	bool isDragging;
 	double prx, pry;
 public:
@@ -44,12 +49,17 @@ public:
 	{
 		RECT rect;
 		GetWindowRect(hWnd, &rect);
-		W = rect.right - rect.left - 15;         // Данная процедура вызывается при изменении размеров окна
-		H = rect.bottom - rect.top - 40;         // В ней задаются значения величин W, H, а также настраиваются значения параметров L, R, B, T таким образом, чтобы обеспечить одинаковые масштабы по координатным осям
+		W = rect.right - rect.left - 15;         // Р”Р°РЅРЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РёР·РјРµРЅРµРЅРёРё СЂР°Р·РјРµСЂРѕРІ РѕРєРЅР°
+		H = rect.bottom - rect.top - 40;         // Р’ РЅРµР№ Р·Р°РґР°СЋС‚СЃСЏ Р·РЅР°С‡РµРЅРёСЏ РІРµР»РёС‡РёРЅ W, H, Р° С‚Р°РєР¶Рµ РЅР°СЃС‚СЂР°РёРІР°СЋС‚СЃСЏ Р·РЅР°С‡РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ L, R, B, T С‚Р°РєРёРј РѕР±СЂР°Р·РѕРј, С‡С‚РѕР±С‹ РѕР±РµСЃРїРµС‡РёС‚СЊ РѕРґРёРЅР°РєРѕРІС‹Рµ РјР°СЃС€С‚Р°Р±С‹ РїРѕ РєРѕРѕСЂРґРёРЅР°С‚РЅС‹Рј РѕСЃСЏРј
+		double R1 = R;
+		R = (T - B) / 2 * W / H + (L + R) / 2;
+		L = -(T - B) / 2 * W / H + (L + R1) / 2;
+		deltaXForDrag = (R - L) / W;
+		deltaYForDrag = (T - B) / H;
 	}
 	void MoveTo(double X, double Y)
 	{
-		posX = X;        // Перемещение графического курсора (posX, posY)
+		posX = X;        // РџРµСЂРµРјРµС‰РµРЅРёРµ РіСЂР°С„РёС‡РµСЃРєРѕРіРѕ РєСѓСЂСЃРѕСЂР° (posX, posY)
 		posY = Y;       
 	}
 	void LineTo(HDC dc, double X, double Y)
@@ -57,16 +67,16 @@ public:
 		::MoveToEx(dc, WorldToScreenX(posX), WorldToScreenY(posY), NULL);
 		::LineTo(dc, WorldToScreenX(X), WorldToScreenY(Y));
 		MoveTo(X, Y);
-		// Отрисовка линии из текущей позиции графического курсора в точку (X, Y) и его перемещение в эту точку
-		// Обратите внимание, что мы действуем в мировых координатах
-		// При отрисовке линии могут быть использованы WinApi функции
-		// ::MoveToEx(dc, Xs, Ys, nullptr) и ::LineTo(dc, Xs, Ys)
+		// РћС‚СЂРёСЃРѕРІРєР° Р»РёРЅРёРё РёР· С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё РіСЂР°С„РёС‡РµСЃРєРѕРіРѕ РєСѓСЂСЃРѕСЂР° РІ С‚РѕС‡РєСѓ (X, Y) Рё РµРіРѕ РїРµСЂРµРјРµС‰РµРЅРёРµ РІ СЌС‚Сѓ С‚РѕС‡РєСѓ
+		// РћР±СЂР°С‚РёС‚Рµ РІРЅРёРјР°РЅРёРµ, С‡С‚Рѕ РјС‹ РґРµР№СЃС‚РІСѓРµРј РІ РјРёСЂРѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚Р°С…
+		// РџСЂРё РѕС‚СЂРёСЃРѕРІРєРµ Р»РёРЅРёРё РјРѕРіСѓС‚ Р±С‹С‚СЊ РёСЃРїРѕР»СЊР·РѕРІР°РЅС‹ WinApi С„СѓРЅРєС†РёРё
+		// ::MoveToEx(dc, Xs, Ys, nullptr) Рё ::LineTo(dc, Xs, Ys)
 	}
 	void Axes(HDC dc)
 	{
 		MoveTo(L, 0);
 		LineTo(dc, R, 0);
-		::LineTo(dc, WorldToScreenX(R) - 10, WorldToScreenY(0) - 10); //отрисовка стрелок
+		::LineTo(dc, WorldToScreenX(R) - 10, WorldToScreenY(0) - 10); //РѕС‚СЂРёСЃРѕРІРєР° СЃС‚СЂРµР»РѕРє
 		::MoveToEx(dc,WorldToScreenX(R), WorldToScreenY(0),NULL);
 		::LineTo(dc, WorldToScreenX(R) - 10, WorldToScreenY(0) + 10);
 		TextOut(dc, WorldToScreenX(R)-15, WorldToScreenY(0)+10, "X",1);
@@ -78,7 +88,7 @@ public:
 		TextOut(dc, WorldToScreenX(0)-15, WorldToScreenY(T)+10, "Y", 1);
 
 		for (double i = 0; i < R; i += M_PI/2) {
-			::MoveToEx(dc, WorldToScreenX(i), WorldToScreenY(0) - 10, NULL); //отрисовка засечек для Х  по пи/2
+			::MoveToEx(dc, WorldToScreenX(i), WorldToScreenY(0) - 10, NULL); //РѕС‚СЂРёСЃРѕРІРєР° Р·Р°СЃРµС‡РµРє РґР»СЏ РҐ  РїРѕ РїРё/2
 			::LineTo(dc, WorldToScreenX(i), WorldToScreenY(0) + 10);
 		}
 		for (double i = 0; i > L; i -= M_PI / 2) {
@@ -86,7 +96,7 @@ public:
 			::LineTo(dc, WorldToScreenX(i), WorldToScreenY(0) + 10);
 		}
 		for (int i = 1; i < T; i++) {
-			::MoveToEx(dc, WorldToScreenX(0)-10, WorldToScreenY(i), NULL); //отрисовка засечек для Y по 1
+			::MoveToEx(dc, WorldToScreenX(0)-10, WorldToScreenY(i), NULL); //РѕС‚СЂРёСЃРѕРІРєР° Р·Р°СЃРµС‡РµРє РґР»СЏ Y РїРѕ 1
 			::LineTo(dc, WorldToScreenX(0)+10, WorldToScreenY(i));
 		}
 		for (int i = 1; i > B; i--) {
@@ -140,31 +150,43 @@ public:
 	void ChangeSize(double X, double Y, bool inc)
 	{
 
-		double deltX = M_PI / 24;
-		double deltY = 0.0625;
+		/*double deltX = M_PI / 24;
+		double deltY = 0.8;*/
 		prx = ScreenToWorldX(X);
 		pry = ScreenToWorldY(Y);
 		if (inc)
 		{
-			R -=abs(R-prx)*deltX;
-			L += abs(L - prx) * deltX;
-			T -= abs(T - pry) * deltY; //убрать для масштабирования с сохранением верха и низа
-			B += abs(B - pry) * deltY;
-
+			pensolid++;
+			/*R -=abs(R-prx)*deltXForSize;
+			L += abs(L - prx) * deltXForSize;
+			T -= abs(T - pry) * deltYForSize;
+			B += abs(B - pry) * deltYForSize;*/
+			L = prx - (prx - L) / deltForSize;
+			R = prx + (R-prx) / deltForSize;
+			T = pry + (T-pry) / deltForSize;
+			B = pry - (pry-B) / deltForSize;
 		}
 		else
 		{
-			R += abs(R - prx) * deltX;
-			L -= abs(L - prx) * deltX;
-			T += abs(T - pry) * deltY;
-			B -= abs(B - pry) * deltY;
+			if (pensolid > 1)
+				pensolid--;
+			/*R += abs(R - prx) * deltXForSize;
+			L -= abs(L - prx) * deltXForSize;
+			T += abs(T - pry) * deltYForSize;
+			B -= abs(B - pry) * deltYForSize;*/
+			L = prx - (prx-L) * deltForSize;
+			R = prx + (R - prx) * deltForSize;
+			T = pry + (T-pry) * deltForSize;
+			B = pry - (pry-B) * deltForSize;
 		}
 
 	}
 	void StartDragging(int X, int Y)
 	{
-		prx = ScreenToWorldX(X);
-		pry = ScreenToWorldY(Y);
+		/*prx = ScreenToWorldX(X);
+		pry = ScreenToWorldY(Y);*/
+		prx = X;
+		pry = Y;
 		isDragging = true;
 	}
 	bool IsDragging()
@@ -189,23 +211,27 @@ public:
 	void Drag( int X, int Y) {
 		if (X <= (WorldToScreenX(R) - 5) && X >= (WorldToScreenX(L) + 5) && Y <= (WorldToScreenY(B) - 5) && Y >= (WorldToScreenY(T) + 5))
 		{
-			double delta = (R - L) * H * 0.00002;
-			if (X - prx > 0) {
-				R -= delta;
-				L -= delta;
+			//double x1 = ScreenToWorldX(X), y1 = ScreenToWorldY(Y);
+			R -= deltaXForDrag * (X - prx);
+			L -= deltaXForDrag * (X - prx);
+			T += deltaYForDrag * (Y - pry);
+			B += deltaYForDrag * (Y - pry);
+			/*if (x1 - prx > 0) {
+				R -= deltaX;
+				L -= deltaX;
 			}
-			else if (X - prx < 0) {
-				R += delta;
-				L += delta;
+			else if (x1 - prx < 0) {
+				R += deltaX;
+				L += deltaX;
 			}
-			if (Y - pry > 0) {
-				T += delta;
-				B += delta;
+			if (y1 - pry > 0) {
+				T -= deltaY;
+				B -= deltaX;
 			}
-			else if (Y - pry < 0) {
-				T -= delta;
-				B -= delta;
-			}
+			else if (y1 - pry < 0) {
+				T += deltaY;
+				B += deltaY;
+			}*/
 			prx = X;
 			pry = Y;
 		}
@@ -220,8 +246,12 @@ public:
 		R = b;
 		T = c;
 		B = d;
+		double R1 = R;
+		R = (T - B) / 2 * W / H + (L + R) / 2;
+		L = -(T - B) / 2 * W / H + (L + R1) / 2;
 		tl = t1;
 		tr = t2;
+		pensolid = 5;
 	}
 	void point(double X, double Y, HDC dc) {
 		
