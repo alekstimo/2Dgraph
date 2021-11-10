@@ -2,6 +2,9 @@
 #include <windowsx.h>
 #include "Data.h"
 #include "Scene2D.h"
+#include "Matrix.h"
+#include "AffineTransform.h"
+#include "Model2D.h"
 
 #define ID_SIN 1
 #define ID_PAR 2
@@ -11,8 +14,8 @@
 #define ID_SPR 6
 #define ID_KRD 7
 #define ID_LSG 8
-#define LOBYTE(w)   ((BYTE) (w))
-#define HIBYTE(w)   ((BYTE) (((WORD) (w) >> 8) & 0xFF))
+//#define LOBYTE(w)   ((BYTE) (w))
+//#define HIBYTE(w)   ((BYTE) (((WORD) (w) >> 8) & 0xFF))
 #define LOWORD(l)   ((WORD) (l))
 #define HIWORD(l)   ((WORD) (((DWORD) (l) >> 16) & 0xFFFF))
 LRESULT _stdcall WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);						// прототип оконной процедуры
@@ -56,7 +59,8 @@ int _stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 // В основном модуле объявляется только одна глобальная переменная - создаётся объект класса Scene2D
 // Все дальнейшие действия осуществляются посредством обращения к методам, реализованным в этом классе
-Scene2D scene(L,R,B,T);
+
+Scene2D scene(L,R,B,T,V,E);
 void (*Func)(double&, double&, double)=Sinusoid;
 bool flag=true;
 LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)		// оконная процедура принимает и обрабатывает все сообщения, отправленные окну
@@ -90,48 +94,56 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)		// 
 					Func = &Sinusoid;
 					flag = true;
 					scene.change(-M_PI, M_PI, 1.5, -1.5, 0, 0);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_PAR: {
 					Func = &Parabola;
 					flag = true;
 					scene.change(-M_PI, M_PI, 1.5, -1.5, 0, 0);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_BUT: {
 					Func = &Butterfly;
 					flag = false;
 					scene.change(-2 * M_PI, 2 * M_PI, 3, -3, 0, 37.8);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_STR: {
 					Func = &Star;
 					flag = false;
 					scene.change(-M_PI, M_PI, 1.5, -1.5, 0, 2 * M_PI);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_ELL: {
 					Func = &Ellipse;
 					flag = false;
 					scene.change(-M_PI, M_PI, 1.5, -1.5, 0, 2 * M_PI);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_SPR: {
 					Func = &Spiral;
 					flag = false;
 					scene.change(-4 * M_PI, 4 * M_PI, 6, -6, 0, 5 * M_PI);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_KRD: {
 					Func = &Kardiola;
 					flag = false;
 					scene.change(-2 * M_PI, 2 * M_PI, 3, -3, 0, 2 * M_PI);
+					scene.plot(Func, flag);
 					break;
 				}
 				case ID_LSG: {
 					Func = &Lassaghu;
 					flag = false;
 					scene.change(-M_PI, M_PI, 1.5, -1.5, 0, 2 * M_PI);
+					scene.plot(Func, flag);
 					break;
 				}
 			}
@@ -144,6 +156,7 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)		// 
 
 			scene.Clear(dc,hWnd);				// Вызов реализованного в классе Camera2D метода, отвечающего за очистку рабочей области окна hWnd
 			scene.Plot(dc, Func, flag);
+			scene.Render(dc);
 			ReleaseDC(hWnd,dc);
 			return DefWindowProc(hWnd,msg,wParam,lParam);
 		}
@@ -190,9 +203,61 @@ LRESULT _stdcall WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)		// 
 			RECT rect;
 			GetWindowRect(hWnd, &rect);
 			bool zDelta = GET_WHEEL_DELTA_WPARAM(wParam) > 0;
-			scene.ChangeSize(GET_X_LPARAM(lParam)- rect.left, GET_Y_LPARAM(lParam) - rect.top,zDelta);
+			POINT P;
+			P.x = GET_X_LPARAM(lParam);
+			P.y = GET_Y_LPARAM(lParam);
+			ScreenToClient(hWnd, &P);
+			scene.ChangeSize(P.x, P.y,zDelta);
 			InvalidateRect(hWnd, nullptr, false);
 		
+		return 0;
+	}
+	case WM_KEYDOWN:
+	{
+		switch (wParam)
+		{
+			case VK_RIGHT:
+			{
+				//CreateWindow("button", "Sinusoid", WS_CHILD | BS_PUSHBUTTON | WS_VISIBLE,
+					//5, 5, 100, 20, hWnd, (HMENU)IDD_DIALOG1, NULL, NULL);
+				scene.Model.Apply(Translation(0.5, 0));
+				break;
+			}
+			case VK_LEFT:
+			{
+				scene.Model.Apply(Translation(-0.5, 0));
+				break;
+			}
+			case VK_UP:
+			{
+				scene.Model.Apply(Translation(0, 0.5));
+				break;
+			}
+			case VK_DOWN:
+			{
+				scene.Model.Apply(Translation(0, -0.5));
+				break;
+			}
+			case VK_ADD: {
+				scene.Model.Apply(Rotation(0.5));
+				break;
+			}
+			case VK_SUBTRACT:
+			{
+				scene.Model.Apply(Rotation(-0.5));
+				break;
+			}
+			case VK_MULTIPLY: {
+				scene.Model.Apply(Scaling(1.6, 1.6));
+				break;
+			}
+			case VK_DIVIDE:
+			{
+				scene.Model.Apply(Scaling(0.625, 0.625));
+				break;
+			}
+		}
+		InvalidateRect(hWnd, nullptr, false);
 		return 0;
 	}
 	case WM_DESTROY:

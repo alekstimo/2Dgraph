@@ -1,6 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <wingdi.h>
+#include "Matrix.h"
 
 double					// Исходные значения параметров L, R, B, T
 	L=-M_PI,
@@ -9,6 +10,17 @@ double					// Исходные значения параметров L, R, B, T
 	T=1.5,
 	tl = 0,
 	tr =0; 
+double v[15] = { 1, 1, 5, 5, 3,
+				4, 1, 1, 4, 5.5,
+				1, 1, 1, 1, 1 };
+Matrix<double> V(3, 5, v);
+int e[12] = { 1, 2,
+			2, 3,
+			3,4,
+			4,1,
+			1,5,
+			5,4 };
+Matrix<int> E(6, 2, e);
 
 void Parabola(double &x,double &y, double t)
 {

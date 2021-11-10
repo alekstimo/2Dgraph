@@ -10,7 +10,7 @@ protected:
 	/*double deltXForSize;
 	double deltYForSize;*/
 	double deltForSize = 1.125;
-	double deltaXForDrag, deltaYForDrag;
+	double pixX, pixY;
 	int pensolid = 5;
 	double pix = (R - L) / W;
 	double L, R, B, T;					// Мировые координаты границ рабочей области окна
@@ -54,8 +54,8 @@ public:
 		double R1 = R;
 		R = (T - B) / 2 * W / H + (L + R) / 2;
 		L = -(T - B) / 2 * W / H + (L + R1) / 2;
-		deltaXForDrag = (R - L) / W;
-		deltaYForDrag = (T - B) / H;
+		pixX = (R - L) / W;
+		pixY = (T - B) / H;
 	}
 	void MoveTo(double X, double Y)
 	{
@@ -150,17 +150,11 @@ public:
 	void ChangeSize(double X, double Y, bool inc)
 	{
 
-		/*double deltX = M_PI / 24;
-		double deltY = 0.8;*/
 		prx = ScreenToWorldX(X);
 		pry = ScreenToWorldY(Y);
 		if (inc)
 		{
 			pensolid++;
-			/*R -=abs(R-prx)*deltXForSize;
-			L += abs(L - prx) * deltXForSize;
-			T -= abs(T - pry) * deltYForSize;
-			B += abs(B - pry) * deltYForSize;*/
 			L = prx - (prx - L) / deltForSize;
 			R = prx + (R-prx) / deltForSize;
 			T = pry + (T-pry) / deltForSize;
@@ -170,22 +164,16 @@ public:
 		{
 			if (pensolid > 1)
 				pensolid--;
-			/*R += abs(R - prx) * deltXForSize;
-			L -= abs(L - prx) * deltXForSize;
-			T += abs(T - pry) * deltYForSize;
-			B -= abs(B - pry) * deltYForSize;*/
 			L = prx - (prx-L) * deltForSize;
 			R = prx + (R - prx) * deltForSize;
 			T = pry + (T-pry) * deltForSize;
 			B = pry - (pry-B) * deltForSize;
 		}
-		deltaXForDrag = (R - L) / W;
-		deltaYForDrag = (T - B) / H;
+		pixX = (R - L) / W;
+		pixY = (T - B) / H;
 	}
 	void StartDragging(int X, int Y)
 	{
-		/*prx = ScreenToWorldX(X);
-		pry = ScreenToWorldY(Y);*/
 		prx = X;
 		pry = Y;
 		isDragging = true;
@@ -194,17 +182,7 @@ public:
 	{
 		return isDragging;
 	}
-	/*void Drag(int X, int Y)
-	{
-		double pox = ScreenToWorldX(X), poy = ScreenToWorldY(Y);
 
-		T -= poy-pry;
-		B -= poy-pry;
-		L -= pox-prx;
-		R -= pox-prx;
-		prx = pox;
-		pry = poy;
-	}*/
 	void StopDragging()
 	{
 		isDragging = false;
@@ -212,27 +190,10 @@ public:
 	void Drag( int X, int Y) {
 		if (X <= (WorldToScreenX(R) - 5) && X >= (WorldToScreenX(L) + 5) && Y <= (WorldToScreenY(B) - 5) && Y >= (WorldToScreenY(T) + 5))
 		{
-			//double x1 = ScreenToWorldX(X), y1 = ScreenToWorldY(Y);
-			R -= deltaXForDrag * (X - prx);
-			L -= deltaXForDrag * (X - prx);
-			T += deltaYForDrag * (Y - pry);
-			B += deltaYForDrag * (Y - pry);
-			/*if (x1 - prx > 0) {
-				R -= deltaX;
-				L -= deltaX;
-			}
-			else if (x1 - prx < 0) {
-				R += deltaX;
-				L += deltaX;
-			}
-			if (y1 - pry > 0) {
-				T -= deltaY;
-				B -= deltaX;
-			}
-			else if (y1 - pry < 0) {
-				T += deltaY;
-				B += deltaY;
-			}*/
+			R -= pixX * (X - prx);
+			L -= pixX * (X - prx);
+			T += pixY * (Y - pry);
+			B += pixY * (Y - pry);
 			prx = X;
 			pry = Y;
 		}
