@@ -71,7 +71,11 @@
     <ClInclude Include="Data.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Model2D.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Plot2DViewer.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

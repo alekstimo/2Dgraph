@@ -14,12 +14,12 @@ public:
 		/*Model = new Model2D[2];
 		Model[1](V, E);*/
 	}
-	void Plot(HDC dc, Func f, bool z, bool axes = true)
+	void Plot(HDC dc, Func f, bool z,COLORREF color, bool axes = true)
 	{
 		HPEN pen = (HPEN)SelectObject(dc, CreatePen(PS_SOLID, 1, RGB(0, 0, 0)));
 		if (axes)
 			Axes(dc);
-		HPEN hPen2 = CreatePen(PS_SOLID, pensolid, RGB(200, 0, 100));
+		HPEN hPen2 = CreatePen(PS_SOLID, pensolid, color);
 		SelectObject(dc, hPen2);
 		pix = (R - L) / W;
 		if (z)
@@ -61,8 +61,8 @@ public:
 				Model.setEdges(Edg);
 		}
 	
-		void Render(HDC dc) {
-			HPEN hPen2 = CreatePen(PS_SOLID, pensolid, RGB(0, 200, 100));
+		void Render(HDC dc, COLORREF color) {
+			HPEN hPen2 = CreatePen(PS_SOLID, pensolid, color);
 			SelectObject(dc, hPen2);
 			double x, y;
 			int Edge = 1;

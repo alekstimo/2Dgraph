@@ -1,0 +1,215 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Русский (Россия) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU MENU
+BEGIN
+    POPUP "Graphs"
+    BEGIN
+        MENUITEM "Sinusoid",                    ID_GRAPHICS_SINUSOID
+        MENUITEM "Parabola",                    ID_GRAPHICS_PARABOLA
+        MENUITEM "Butterfly",                   ID_GRAPHICS_BUTTERFLY
+        MENUITEM "Star",                        ID_GRAPHICS_STAR
+        MENUITEM "Ellipse",                     ID_GRAPHICS_ELLIPSE
+        MENUITEM "Spiral",                      ID_GRAPHICS_SPIRAL
+        MENUITEM "Kardiola",                    ID_GRAPHICS_KARDIOLA
+        MENUITEM "Lassaghu",                    ID_GRAPHICS_LASSAGHU
+    END
+    POPUP "Window"
+    BEGIN
+        MENUITEM "Exit",                        ID_WINDOW_EXIT
+    END
+    POPUP "Color"
+    BEGIN
+        POPUP "Graph"
+        BEGIN
+            MENUITEM "Red",                         ID_GRAPH_RED
+            MENUITEM "Blue",                        ID_GRAPH_BLUE
+            MENUITEM "Green",                       ID_GRAPH_GREEN
+            MENUITEM "Purple",                      ID_GRAPH_PURPLE
+        END
+        POPUP "Model"
+        BEGIN
+            MENUITEM "Red",                         ID_MODEL_RED
+            MENUITEM "Green",                       ID_MODEL_GREEN
+            MENUITEM "Blue",                        ID_MODEL_BLUE
+            MENUITEM "Purple",                      ID_MODEL_PURPLE
+            MENUITEM "Yellow",                      ID_MODEL_YELLOW
+        END
+    END
+    POPUP "Affine Transform"
+    BEGIN
+        MENUITEM "Rotation",                    ID_AFFINETRANSFORM_ROTATION
+        MENUITEM "Translation",                 ID_AFFINETRANSFORM_TRANSLATION
+        MENUITEM "Scaling",                     ID_AFFINETRANSFORM_SCALING
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG1 DIALOGEX 0, 0, 209, 131
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Поворот"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "ОК",IDOK,7,107,55,14
+    PUSHBUTTON      "Отмена",IDCANCEL,145,107,57,14
+    EDITTEXT        IDC_TEXT,114,17,48,12,ES_AUTOHSCROLL
+    CONTROL         "Произвольный угол",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,21,18,83,10
+    CONTROL         "Отражение относительно оси ординат",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,21,37,148,10
+    CONTROL         "Отражение относительно оси абцисс",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,21,55,142,10
+    CONTROL         "Отражение относительно начала координат",IDC_RADIO4,
+                    "Button",BS_AUTORADIOBUTTON,21,73,169,10
+END
+
+IDD_DIALOG2 DIALOGEX 0, 0, 173, 94
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Перенос"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "ОК",IDOK,7,73,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,116,73,50,14
+    LTEXT           "Смещение по Х",IDC_STATIC,25,23,52,8
+    LTEXT           "Смещение по Y",IDC_STATIC,25,49,52,8
+    EDITTEXT        IDC_EDIT1,102,20,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT2,101,47,40,14,ES_AUTOHSCROLL
+END
+
+IDD_DIALOG3 DIALOGEX 0, 0, 185, 89
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "ОК",IDOK,7,68,50,14
+    PUSHBUTTON      "Отмена",IDCANCEL,128,68,50,14
+    EDITTEXT        IDC_SCRX,127,28,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_SCRY,127,46,40,14,ES_AUTOHSCROLL
+    LTEXT           "Масштабирование по оси X",IDC_STATIC,17,31,92,8
+    LTEXT           "Масштабирование по оси Y",IDC_STATIC,17,48,92,8
+    CONTROL         "Увеличение",IDC_BIG,"Button",BS_AUTORADIOBUTTON | WS_GROUP,17,15,57,10
+    CONTROL         "Уменьшение",IDC_SML,"Button",BS_AUTORADIOBUTTON,88,15,58,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 202
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 121
+    END
+
+    IDD_DIALOG2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 166
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_DIALOG3, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 178
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 82
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DIALOG1 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG2 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG3 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // Русский (Россия) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
